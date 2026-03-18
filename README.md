@@ -1,5 +1,7 @@
 # ScanToSheet
 
+[![Try Me](https://img.shields.io/badge/Try%20Me-brightgreen?style=for-the-badge)](https://everyonelovespepsicola.github.io/ScanToSheet/)
+
 ScanToSheet is a responsive web application that allows users to seamlessly scan PDF417 barcodes (commonly found on US driver's licenses) using their device's camera, parse the AAMVA standard information, and automatically populate a data entry form. The collected entries are stored locally and can be easily exported as an Excel spreadsheet.
 
 ## Features
