@@ -88,7 +88,11 @@ function startScanner() {
         return;
     }
     if (!codeReader) {
-        alert("Scanner library is not loaded. This can happen if you are using an in-app browser (like Facebook/Instagram), an ad-blocker blocked the CDN, or your browser is too old. Try opening this page directly in a standard mobile browser like Chrome.");
+        if (typeof ZXing === 'undefined') {
+            alert("The barcode script failed to download from the internet. If you are using Brave Browser or an ad-blocker, please turn off your shields for this site.");
+        } else {
+            alert("The barcode scanner failed to initialize properly. This browser might not support the required camera APIs.");
+        }
         return;
     }
     scannerContainer.classList.add('active');
@@ -198,8 +202,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof ZXing === 'undefined') {
             console.error("ZXing library is not defined. It failed to load from the CDN or failed to parse.");
         } else {
-            // Initialize the barcode reader from the ZXing library
-            codeReader = new ZXing.BrowserPDF417Reader();
+            // Some versions of ZXing package the PDF417 reader differently.
+            // We will safely try the specific one, then fall back to the MultiFormat one.
+            if (typeof ZXing.BrowserPDF417Reader === 'function') {
+                codeReader = new ZXing.BrowserPDF417Reader();
+            } else if (typeof ZXing.BrowserMultiFormatReader === 'function') {
+                codeReader = new ZXing.BrowserMultiFormatReader();
+            } else {
+                console.error("ZXing loaded, but no valid barcode reader was found.");
+            }
         }
     } catch (err) {
         console.error("Failed to initialize barcode scanner. Camera API might be blocked by the browser.", err);
