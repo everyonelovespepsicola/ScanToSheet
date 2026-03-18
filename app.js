@@ -214,9 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Some versions of ZXing package the PDF417 reader differently.
             // We will safely try the specific one, then fall back to the MultiFormat one.
             if (typeof ZXing.BrowserPDF417Reader === 'function') {
-                codeReader = new ZXing.BrowserPDF417Reader();
+                // Pass 100ms to decrease the delay between scans (makes it much faster than default 500ms)
+                codeReader = new ZXing.BrowserPDF417Reader(100);
             } else if (typeof ZXing.BrowserMultiFormatReader === 'function') {
-                codeReader = new ZXing.BrowserMultiFormatReader();
+                codeReader = new ZXing.BrowserMultiFormatReader(null, 100);
             } else {
                 console.error("ZXing loaded, but no valid barcode reader was found.");
             }
