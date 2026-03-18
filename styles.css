@@ -51,6 +51,36 @@ html, body {
     z-index: 1600; /* Ensure it's on top of the table overlay but under scanner */
 }
 
+.view-toggle-btn.close-mode {
+    background-color: rgba(229, 62, 62, 0.9); /* Red color for close action */
+}
+
+.view-toggle-btn.close-mode:hover {
+    background-color: #c53030;
+}
+
+/*
+.debug-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(229, 62, 62, 0.9); /* Reddish to indicate debug */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    z-index: 1600; /* Ensure it's on top of the table overlay but under scanner */
+}
+*/
+
+.debug-btn:hover {
+    background-color: #c53030;
+}
+
 .card {
     background-color: rgba(255, 255, 255, 0.9);
     padding: clamp(1.5rem, 5vw, 3rem); /* Responsive padding */
@@ -191,15 +221,6 @@ html, body {
 .table-container h2 {
     margin-bottom: 1rem;
     text-align: center;
-}
-
-.close-table-svg {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 40px;
-    height: 40px;
-    z-index: 10;
 }
 
 table {

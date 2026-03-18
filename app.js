@@ -10,10 +10,10 @@ let tableBody;
 let infoForm;
 let exportBtn;
 let clearBtn;
+// let debugBtn;
 let toggleViewBtn;
 let formLayer;
 let tableLayer;
-let closeTableBtn;
 
 // Global error catcher to help debug mobile issues
 window.addEventListener('error', function(event) {
@@ -208,11 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
     infoForm = document.getElementById('info-form');
     tableBody = document.getElementById('data-table-body');
     exportBtn = document.getElementById('export-btn');
+    // debugBtn = document.getElementById('debug-btn');
     clearBtn = document.getElementById('clear-btn');
     toggleViewBtn = document.getElementById('toggle-view-btn');
     formLayer = document.getElementById('form-layer');
     tableLayer = document.getElementById('table-layer');
-    closeTableBtn = document.getElementById('close-table-btn');
     
     // --- Scanner Element Assignments & Setup ---
     scanBtn = document.getElementById('scan-btn');
@@ -291,6 +291,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Listener for the debug button to auto-fill and submit repeatedly
+    /*
+    let isDebugging = false;
+    debugBtn.addEventListener('click', async () => {
+        isDebugging = !isDebugging;
+        if (isDebugging) {
+            debugBtn.textContent = 'Stop Debug';
+            debugBtn.style.backgroundColor = '#38a169'; // Green while running
+            let counter = 1;
+            
+            // Helper functions to create delays and simulate typing
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            const typeText = async (id, text) => {
+                const el = document.getElementById(id);
+                el.value = '';
+                for (const char of text) {
+                    if (!isDebugging) return; // Exit instantly if stopped
+                    el.value += char;
+                    await sleep(50); // 50ms delay per keystroke
+                }
+            };
+            
+            // Run the typing sequence in an async loop
+            while (isDebugging) {
+                await typeText('name', `Test User ${counter}`);
+                if (!isDebugging) break;
+                await typeText('address', `${1000 + counter} Debug Lane`);
+                if (!isDebugging) break;
+                await typeText('city', 'Test City');
+                if (!isDebugging) break;
+                await typeText('state', 'TS');
+                if (!isDebugging) break;
+                await typeText('zip', `12345`);
+                if (!isDebugging) break;
+                
+                // Pause a moment so we can see the completed form
+                await sleep(500);
+                if (!isDebugging) break;
+
+                document.querySelector('.submit-btn').click();
+                counter++;
+                
+                // Pause before starting the next entry
+                await sleep(500); 
+            }
+        } else {
+            debugBtn.textContent = 'Debug';
+            debugBtn.style.backgroundColor = ''; // Reset to CSS default
+        }
+    });
+    */
+
     // Listener for the view toggle button
     toggleViewBtn.addEventListener('click', () => {
         const isTableActive = tableLayer.classList.contains('active');
@@ -303,6 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (password === '1234') {
                 tableLayer.classList.add('active');
                 toggleViewBtn.textContent = 'Close Entries';
+                toggleViewBtn.classList.add('close-mode');
             } else {
                 alert("Incorrect password.");
             }
@@ -310,13 +363,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Trying to go back to the form
             tableLayer.classList.remove('active');
             toggleViewBtn.textContent = 'View Entries';
+            toggleViewBtn.classList.remove('close-mode');
         }
-    });
-
-    // Listener for the new SVG close button on the table modal
-    closeTableBtn.addEventListener('click', () => {
-        tableLayer.classList.remove('active');
-        toggleViewBtn.textContent = 'View Entries';
     });
 
     // --- Scanner Event Listeners ---

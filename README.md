@@ -18,5 +18,19 @@ ScanToSheet is a responsive web application that allows users to seamlessly scan
 3. Click **OK** to save the entry to the local database.
 4. Click **View Entries** to review all collected data and export it to `.xlsx`.
 
+## Mobile Device Compatibility & Troubleshooting
+This application fully supports Android and iOS (Apple) phones and tablets. If you experience issues launching the camera, please keep these rules in mind:
+
+- **HTTPS is Required:** Mobile browsers completely block camera access if the site is not loaded over a secure `https://` connection (like GitHub Pages).
+- **In-App Browsers:** If you open the link directly from inside social media apps (like Facebook, Instagram, or LinkedIn), the camera will often be blocked. You must tap the app's menu and select **"Open in System Browser"** (Chrome or Safari).
+
+### Apple (iPhone / iPad) Specifics
+- **Use Safari:** Native Safari is the most reliable browser for camera access on iOS.
+- **Downloads Location:** When you click "Save All to File", the exported `.xlsx` file will not pop up at the bottom of the screen like it does on a PC. Instead, Safari will ask to download the file, and it will be saved to your iCloud Drive or "On My iPhone" inside the native Apple **Files** app.
+
+### Android Specifics
+- **Use Chrome:** Google Chrome is the recommended browser for Android.
+- **Ad-Blockers:** Strict ad-blockers or privacy-focused browsers (like Brave) might block necessary scripts depending on your settings.
+
 ## License
 This project is licensed under the GNU General Public License v2.0 - see the LICENSE file for details.
