@@ -120,9 +120,14 @@ html, body {
     background-color: #2b6cb0;
 }
 
+.table-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
 .export-btn {
-    display: block;
-    margin: 0 auto 1.5rem auto;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 8px;
@@ -136,6 +141,22 @@ html, body {
 
 .export-btn:hover {
     background-color: #2f855a;
+}
+
+.clear-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #e53e3e; /* Red for a destructive action */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.clear-btn:hover {
+    background-color: #c53030;
 }
 
 .table-overlay {

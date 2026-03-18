@@ -9,6 +9,7 @@ const STORAGE_KEY = 'personalInfoDatabase';
 let tableBody;
 let infoForm;
 let exportBtn;
+let clearBtn;
 let toggleViewBtn;
 let formLayer;
 let tableLayer;
@@ -207,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     infoForm = document.getElementById('info-form');
     tableBody = document.getElementById('data-table-body');
     exportBtn = document.getElementById('export-btn');
+    clearBtn = document.getElementById('clear-btn');
     toggleViewBtn = document.getElementById('toggle-view-btn');
     formLayer = document.getElementById('form-layer');
     tableLayer = document.getElementById('table-layer');
@@ -268,11 +270,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         exportToExcel();
-        
-        // Clear data after exporting
-        database = [];
-        saveDatabase(); // This will save an empty array to localStorage, clearing it
-        updateTable(); // This will clear the table on screen
+    });
+
+    // Listener for the clear button
+    clearBtn.addEventListener('click', () => {
+        if (database.length === 0) {
+            alert("There is no data to clear.");
+            return;
+        }
+        if (confirm("WARNING: This will permanently delete all stored entries. Are you sure you want to proceed?")) {
+            const password = prompt("Please enter the 4-digit password to clear entries:");
+            if (password === '1234') {
+                database = [];
+                saveDatabase();
+                updateTable();
+                alert("All entries have been cleared.");
+            } else if (password !== null) {
+                alert("Incorrect password.");
+            }
+        }
     });
 
     // Listener for the view toggle button
