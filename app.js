@@ -14,6 +14,15 @@ let formLayer;
 let tableLayer;
 let closeTableBtn;
 
+// Global error catcher to help debug mobile issues
+window.addEventListener('error', function(event) {
+    if (event.filename && event.filename.includes('zxing')) {
+        alert("ZXing Script Error: " + event.message);
+    } else if (event.message && event.message.includes('SyntaxError')) {
+        alert("Syntax Error: Your browser might be too old to run this script. " + event.message);
+    }
+});
+
 // --- Scanner Variables ---
 let scanBtn;
 let scannerContainer;
@@ -89,7 +98,7 @@ function startScanner() {
     }
     if (!codeReader) {
         if (typeof ZXing === 'undefined') {
-            alert("The barcode script failed to download from the internet. If you are using Brave Browser or an ad-blocker, please turn off your shields for this site.");
+            alert("The barcode script failed to load. This usually means your mobile browser is too old and rejected the script (SyntaxError), or it was blocked.");
         } else {
             alert("The barcode scanner failed to initialize properly. This browser might not support the required camera APIs.");
         }
