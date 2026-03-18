@@ -83,8 +83,12 @@ function parseAAMVA(text) {
  * Starts the camera and begins scanning for PDF417 barcodes.
  */
 function startScanner() {
+    if (!window.isSecureContext) {
+        alert("Camera access requires a secure connection (HTTPS). If testing locally, use localhost or a secure tunnel.");
+        return;
+    }
     if (!codeReader) {
-        alert("Scanner library is not loaded. Please check your internet connection.");
+        alert("Scanner library is not loaded. This can happen if you are using an in-app browser (like Facebook/Instagram), an ad-blocker blocked the CDN, or your browser is too old. Try opening this page directly in a standard mobile browser like Chrome.");
         return;
     }
     scannerContainer.classList.add('active');
@@ -174,10 +178,14 @@ document.addEventListener('DOMContentLoaded', () => {
     scannerCancelBtn = document.getElementById('scanner-cancel-btn');
     
     try {
-        // Initialize the barcode reader from the ZXing library
-        codeReader = new ZXing.BrowserPDF417Reader();
+        if (typeof ZXing === 'undefined') {
+            console.error("ZXing library is not defined. It failed to load from the CDN or failed to parse.");
+        } else {
+            // Initialize the barcode reader from the ZXing library
+            codeReader = new ZXing.BrowserPDF417Reader();
+        }
     } catch (err) {
-        console.error("Failed to initialize barcode scanner:", err);
+        console.error("Failed to initialize barcode scanner. Camera API might be blocked by the browser.", err);
     }
 
     // Load existing data from localStorage and render the table
