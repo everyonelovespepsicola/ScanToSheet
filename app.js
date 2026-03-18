@@ -92,30 +92,47 @@ function startScanner() {
         return;
     }
     scannerContainer.classList.add('active');
-    // decodeFromVideoDevice handles camera access and permission prompts.
-    // It returns a promise that resolves when scanning starts, and rejects on permission error.
-    codeReader.decodeFromVideoDevice(undefined, 'scanner-video', (result, error) => {
-        if (result) {
-            codeReader.reset(); // Stop scanning immediately after a success
-            scannerContainer.classList.remove('active');
-            const parsedData = parseAAMVA(result.getText());
-
-            // If we successfully parsed an address, populate the form
-            if (parsedData.address && parsedData.city) {
-                document.getElementById('name').value = `${parsedData.firstName || ''} ${parsedData.lastName || ''}`.trim();
-                document.getElementById('address').value = parsedData.address || '';
-                document.getElementById('city').value = parsedData.city || '';
-                document.getElementById('state').value = parsedData.state || '';
-                document.getElementById('zip').value = parsedData.zip || '';
-            } else {
-                alert("Barcode found, but could not extract valid address information.");
+    
+    // Get available cameras and prefer the back-facing one
+    codeReader.getVideoInputDevices().then((videoInputDevices) => {
+        let selectedDeviceId = undefined;
+        if (videoInputDevices.length > 0) {
+            selectedDeviceId = videoInputDevices[0].deviceId; // default to first
+            // Look for rear camera
+            const backCamera = videoInputDevices.find(device => 
+                device.label.toLowerCase().includes('back') || 
+                device.label.toLowerCase().includes('environment')
+            );
+            if (backCamera) {
+                selectedDeviceId = backCamera.deviceId;
             }
         }
+        
+        codeReader.decodeFromVideoDevice(selectedDeviceId, 'scanner-video', (result, error) => {
+            if (result) {
+                codeReader.reset(); // Stop scanning immediately after a success
+                scannerContainer.classList.remove('active');
+                const parsedData = parseAAMVA(result.getText());
+
+                // If we successfully parsed an address, populate the form
+                if (parsedData.address && parsedData.city) {
+                    document.getElementById('name').value = `${parsedData.firstName || ''} ${parsedData.lastName || ''}`.trim();
+                    document.getElementById('address').value = parsedData.address || '';
+                    document.getElementById('city').value = parsedData.city || '';
+                    document.getElementById('state').value = parsedData.state || '';
+                    document.getElementById('zip').value = parsedData.zip || '';
+                } else {
+                    alert("Barcode found, but could not extract valid address information.");
+                }
+            }
+        }).catch(err => {
+            console.error("Camera permission error:", err);
+            codeReader.reset();
+            scannerContainer.classList.remove('active');
+            alert("Camera access is required for scanning. Please grant permission and ensure you are on a secure (https) connection.");
+        });
     }).catch(err => {
-        console.error("Camera permission error:", err);
-        codeReader.reset(); // Ensure camera is released on error
-        scannerContainer.classList.remove('active'); // Hide scanner if permission is denied
-        alert("Camera access is required for scanning. Please grant permission and ensure you are on a secure (https) connection.");
+        console.error("Error enumerating devices:", err);
     });
 }
 /**
