@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScanToSheet</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background"></div>
+    <button id="toggle-view-btn" class="view-toggle-btn">View Entries</button>
+
+    <main class="content">
+        <!-- The form card is one layer -->
+        <div class="card" id="form-layer">
+            <h1>Personal Information</h1>
+            <form class="info-form" id="info-form">
+                <input type="text" id="name" aria-label="Name" placeholder="Name" required>
+                <input type="text" id="address" aria-label="Address" placeholder="Address" required>
+                <input type="text" id="city" aria-label="City" placeholder="City" required>
+                <input type="text" id="state" aria-label="State" placeholder="State" required>
+                <input type="text" id="zip" aria-label="Zip" placeholder="Zip" required>
+                <div class="form-buttons">
+                    <button type="button" id="scan-btn" class="scan-btn">Launch Camera</button>
+                    <button type="submit" class="submit-btn">OK</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Scanning Modal -->
+        <div id="scanner-container" class="scanner-container">
+            <video id="scanner-video"></video>
+            <button id="scanner-cancel-btn" class="scanner-cancel-btn">Cancel</button>
+        </div>
+
+        <!-- The table is the second layer, initially hidden -->
+        <div class="table-overlay" id="table-layer">
+            <div class="table-container">
+                <svg id="close-table-btn" class="close-table-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+                  <defs>
+                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.25" />
+                    </filter>
+                    
+                    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#ff6a88" />
+                      <stop offset="100%" stop-color="#ff4b2b" />
+                    </linearGradient>
+                  </defs>
+
+                  <style>
+                    /* CSS Animations for hover and click interactions */
+                    .close-btn {
+                      cursor: pointer;
+                      transform-origin: 50px 50px; /* Anchors the zoom to the center */
+                      transition: transform 0.2s cubic-bezier(0.25, 1.5, 0.5, 1);
+                    }
+                    /* Slight pop-out effect on hover */
+                    .close-btn:hover { transform: scale(1.08); }
+                    /* Press-down effect on click */
+                    .close-btn:active { transform: scale(0.92); }
+                  </style>
+
+                  <g class="close-btn">
+                    <rect x="15" y="15" width="70" height="70" rx="4" fill="url(#bg-grad)" filter="url(#shadow)" />
+                    <g stroke="#ffffff" stroke-width="7" stroke-linecap="square">
+                      <line x1="35" y1="35" x2="65" y2="65" />
+                      <line x1="65" y1="35" x2="35" y2="65" />
+                    </g>
+                  </g>
+                </svg>
+                <h2>Stored Entries</h2>
+                <button class="export-btn" id="export-btn" type="button">Save All to File & Clear</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table-body">
+                        <!-- Data rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Library to handle XLSX file creation -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <!-- Library for barcode scanning -->
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.0/umd/zxing.min.js"></script>
+    <!-- Our custom script -->
+    <script src="app.js"></script>
+</body>
+</html>
