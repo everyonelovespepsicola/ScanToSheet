@@ -57,9 +57,9 @@ function parseAAMVA(text) {
     }
     const fields = {};
     // The raw data often starts with non-printable characters, so we look for the AAMVA header.
-    const startIndex = text.indexOf('ANSI ');
+    const startIndex = text.indexOf('ANSI');
     const cleanedText = startIndex !== -1 ? text.substring(startIndex) : '';
-    const lines = cleanedText.split('\n');
+    const lines = cleanedText.split(/\r?\n|\r/);
 
     // AAMVA field codes for common fields
     const fieldMap = {
@@ -121,8 +121,18 @@ function startScanner() {
             }
         }
         
-        codeReader.decodeFromVideoDevice(selectedDeviceId, 'scanner-video', (result, error) => {
+        // Force high resolution. PDF417 barcodes are too dense for standard 480p web feeds.
+        const constraints = {
+            video: {
+                deviceId: selectedDeviceId ? { exact: selectedDeviceId } : undefined,
+                width: { ideal: 1920 },
+                height: { ideal: 1080 }
+            }
+        };
+
+        codeReader.decodeFromConstraints(constraints, 'scanner-video', (result, error) => {
             if (result) {
+                console.log("Raw Scanned Data:", result.getText());
                 codeReader.reset(); // Stop scanning immediately after a success
                 scannerContainer.classList.remove('active');
                 const parsedData = parseAAMVA(result.getText());
