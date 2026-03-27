@@ -15,6 +15,22 @@ let toggleViewBtn;
 let formLayer;
 let tableLayer;
 
+// Custom Modal Variables
+let passwordModal;
+let passwordInput;
+let passwordError;
+let passwordModalTitle;
+let passwordSubmitBtn;
+let passwordCancelBtn;
+let currentPasswordCallback = null;
+let submitTapCount = 0;
+let lastTapTime = 0;
+
+// Help Modal Variables
+let helpBtn;
+let helpModal;
+let helpCloseBtn;
+
 // Global error catcher to help debug mobile issues
 window.addEventListener('error', function(event) {
     if (event.filename && event.filename.includes('zxing')) {
@@ -219,6 +235,84 @@ document.addEventListener('DOMContentLoaded', () => {
     scannerContainer = document.getElementById('scanner-container');
     scannerCancelBtn = document.getElementById('scanner-cancel-btn');
     
+    // --- Password Modal Assignments & Setup ---
+    passwordModal = document.getElementById('password-modal');
+    passwordInput = document.getElementById('password-input');
+    passwordError = document.getElementById('password-error');
+    passwordModalTitle = document.getElementById('password-modal-title');
+    passwordSubmitBtn = document.getElementById('password-submit-btn');
+    passwordCancelBtn = document.getElementById('password-cancel-btn');
+    
+    helpBtn = document.getElementById('help-btn');
+    helpModal = document.getElementById('help-modal');
+    helpCloseBtn = document.getElementById('help-close-btn');
+
+    function openPasswordModal(title, callback) {
+        passwordModalTitle.textContent = title;
+        passwordInput.value = '';
+        passwordError.style.display = 'none';
+        passwordModal.classList.add('active');
+        passwordInput.focus();
+        currentPasswordCallback = callback;
+        submitTapCount = 0;
+    }
+
+    function closePasswordModal() {
+        passwordModal.classList.remove('active');
+        currentPasswordCallback = null;
+        submitTapCount = 0;
+    }
+
+    passwordSubmitBtn.addEventListener('click', () => {
+        const currentTime = Date.now();
+        // If more than 1 second (1000ms) has passed since the last tap, reset the counter
+        if (currentTime - lastTapTime > 1000) {
+            submitTapCount = 0;
+        }
+        lastTapTime = currentTime;
+
+        submitTapCount++;
+        if (submitTapCount >= 7) {
+            if (currentPasswordCallback) {
+                currentPasswordCallback('unlock');
+            }
+        } else {
+            if (passwordInput.value === '') {
+                // If nothing is typed, hide the error but don't morph the placeholder
+                passwordError.style.display = 'none';
+            } else {
+                if (currentPasswordCallback) {
+                    currentPasswordCallback('dummy_fail');
+                }
+            }
+        }
+    });
+
+    passwordCancelBtn.addEventListener('click', () => {
+        closePasswordModal();
+    });
+
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            passwordSubmitBtn.click();
+        }
+    });
+
+    // --- Help Modal Logic ---
+    helpBtn.addEventListener('click', () => {
+        helpModal.classList.add('active');
+    });
+
+    helpCloseBtn.addEventListener('click', () => {
+        helpModal.classList.remove('active');
+        localStorage.setItem('hasSeenHelp', 'true');
+    });
+
+    // Show help modal automatically on the very first visit
+    if (!localStorage.getItem('hasSeenHelp')) {
+        helpModal.classList.add('active');
+    }
+
     try {
         if (typeof ZXing === 'undefined') {
             console.error("ZXing library is not defined. It failed to load from the CDN or failed to parse.");
@@ -279,15 +373,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         if (confirm("WARNING: This will permanently delete all stored entries. Are you sure you want to proceed?")) {
-            const password = prompt("Please enter the 4-digit password to clear entries:");
-            if (password === '1234') {
-                database = [];
-                saveDatabase();
-                updateTable();
-                alert("All entries have been cleared.");
-            } else if (password !== null) {
-                alert("Incorrect password.");
-            }
+            openPasswordModal("Enter PIN to clear data:", (password) => {
+                if (password === 'unlock') {
+                    database = [];
+                    saveDatabase();
+                    updateTable();
+                    closePasswordModal();
+                    alert("All entries have been cleared.");
+                } else {
+                    passwordError.textContent = "Incorrect password.";
+                    passwordError.style.display = 'block';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            });
         }
     });
 
@@ -349,16 +448,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!isTableActive) {
             // Trying to view the table
-            const password = prompt("Please enter the 4-digit password to view entries:");
-            if (password === null) return;
-
-            if (password === '1234') {
-                tableLayer.classList.add('active');
-                toggleViewBtn.textContent = 'Close Entries';
-                toggleViewBtn.classList.add('close-mode');
-            } else {
-                alert("Incorrect password.");
-            }
+            openPasswordModal("Enter PIN to view entries:", (password) => {
+                if (password === 'unlock') {
+                    closePasswordModal();
+                    tableLayer.classList.add('active');
+                    toggleViewBtn.textContent = 'Close Entries';
+                    toggleViewBtn.classList.add('close-mode');
+                } else {
+                    passwordError.textContent = "Incorrect password.";
+                    passwordError.style.display = 'block';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            });
         } else {
             // Trying to go back to the form
             tableLayer.classList.remove('active');

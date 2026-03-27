@@ -59,6 +59,27 @@ html, body {
     background-color: #c53030;
 }
 
+.help-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background-color: #4299e1;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    z-index: 1600; /* Same as view-toggle-btn */
+}
+
+.help-btn:hover {
+    background-color: #2b6cb0;
+}
+
 /*
 .debug-btn {
     position: fixed;
@@ -279,4 +300,23 @@ tbody tr:last-child td {
 
 .scanner-cancel-btn:hover {
     background-color: #c53030;
+}
+
+.password-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1.5rem;
+    font-family: inherit;
+    text-align: center;
+    letter-spacing: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.password-error {
+    color: #e53e3e;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    display: none;
 }
