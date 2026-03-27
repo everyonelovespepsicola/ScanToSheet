@@ -10,13 +10,13 @@ ScanToSheet is a responsive web application that allows users to seamlessly scan
 - **Local Storage:** Safely persists entries in your browser's local cache between sessions.
 - **Export to Excel:** Downloads all collected entries as a formatted `.xlsx` file using SheetJS.
 - **Responsive Design:** Works beautifully on mobile, tablet, and desktop screens with adaptive overlay layers.
-- **Secure View:** Protects the viewing of collected entries behind a simple PIN code.
+- **Secure View:** Protects the viewing of collected entries behind a simple PIN code (default: **1234**).
 
 ## Usage
 1. Open `index.html` in a modern web browser.
 2. Click **Launch Camera** and grant permissions to scan an ID, or enter data manually.
 3. Click **OK** to save the entry to the local database.
-4. Click **View Entries** to review all collected data and export it to `.xlsx`.
+4. Click **View Entries** (enter PIN **1234**) to review all collected data and export it to `.xlsx`.
 
 ## Mobile Device Compatibility & Troubleshooting
 This application fully supports Android and iOS (Apple) phones and tablets. If you experience issues launching the camera, please keep these rules in mind:

@@ -23,8 +23,6 @@ let passwordModalTitle;
 let passwordSubmitBtn;
 let passwordCancelBtn;
 let currentPasswordCallback = null;
-let submitTapCount = 0;
-let lastTapTime = 0;
 
 // Help Modal Variables
 let helpBtn;
@@ -254,25 +252,15 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordModal.classList.add('active');
         passwordInput.focus();
         currentPasswordCallback = callback;
-        submitTapCount = 0;
     }
 
     function closePasswordModal() {
         passwordModal.classList.remove('active');
         currentPasswordCallback = null;
-        submitTapCount = 0;
     }
 
     passwordSubmitBtn.addEventListener('click', () => {
-        const currentTime = Date.now();
-        // If more than 1 second (1000ms) has passed since the last tap, reset the counter
-        if (currentTime - lastTapTime > 1000) {
-            submitTapCount = 0;
-        }
-        lastTapTime = currentTime;
-
-        submitTapCount++;
-        if (submitTapCount >= 7) {
+        if (passwordInput.value === '1234') {
             if (currentPasswordCallback) {
                 currentPasswordCallback('unlock');
             }
@@ -282,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 passwordError.style.display = 'none';
             } else {
                 if (currentPasswordCallback) {
-                    currentPasswordCallback('dummy_fail');
+                    currentPasswordCallback('fail');
                 }
             }
         }
