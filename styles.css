@@ -110,6 +110,13 @@ html, body {
     background-color: #c53030;
 }
 
+/* On smaller screens, move the fullscreen button to its own row to prevent overlap */
+@media screen and (max-width: 550px) {
+    .fullscreen-btn {
+        top: 80px;
+    }
+}
+
 /*
 .debug-btn {
     position: fixed;
