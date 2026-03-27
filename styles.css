@@ -11,6 +11,12 @@ html, body {
     font-family: sans-serif;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent body scroll, let .content handle scrolling */
+}
+
 .background {
     position: fixed;
     top: 0;
@@ -28,17 +34,33 @@ html, body {
     justify-content: center; /* Center the content vertically */
     align-items: center;
     gap: 2rem;
-    height: 100vh; /* Full viewport height */
+    flex: 1; /* Takes up the remaining height under the top bar */
     padding: 1rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
     overflow-y: auto; /* Allow vertical scrolling for content */
 }
 
+.top-bar {
+    position: relative;
+    z-index: 1600; /* Ensure it stays above the table overlay */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+@media screen and (max-width: 550px) {
+    .top-bar {
+        justify-content: center;
+        padding: 1rem;
+    }
+}
+
 .view-toggle-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 8px;
@@ -48,7 +70,6 @@ html, body {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    z-index: 1600; /* Ensure it's on top of the table overlay but under scanner */
 }
 
 .view-toggle-btn.close-mode {
@@ -60,9 +81,6 @@ html, body {
 }
 
 .help-btn {
-    position: fixed;
-    top: 20px;
-    left: 20px;
     width: 44px;
     height: 44px;
     border: none;
@@ -73,7 +91,6 @@ html, body {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    z-index: 1600; /* Same as view-toggle-btn */
 }
 
 .help-btn:hover {
@@ -81,10 +98,6 @@ html, body {
 }
 
 .fullscreen-btn {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     padding: 1rem 2rem;
     border: none;
     border-radius: 8px;
@@ -94,7 +107,6 @@ html, body {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    z-index: 1600;
     white-space: nowrap;
 }
 
@@ -108,13 +120,6 @@ html, body {
 
 .fullscreen-btn.close-mode:hover {
     background-color: #c53030;
-}
-
-/* On smaller screens, move the fullscreen button to its own row to prevent overlap */
-@media screen and (max-width: 550px) {
-    .fullscreen-btn {
-        top: 80px;
-    }
 }
 
 /*
