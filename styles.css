@@ -41,32 +41,13 @@ body {
     overflow-y: auto; /* Allow vertical scrolling for content */
 }
 
-.top-bar {
-    position: relative;
-    z-index: 1600; /* Ensure it stays above the table overlay */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-@media screen and (max-width: 550px) {
-    .top-bar {
-        justify-content: center;
-        padding: 1rem;
-    }
-}
-
 .view-toggle-btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem;
     border: none;
     border-radius: 8px;
     background-color: rgba(45, 55, 72, 0.9);
     color: white;
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
@@ -81,13 +62,13 @@ body {
 }
 
 .help-btn {
-    width: 44px;
-    height: 44px;
+    width: 32px;
+    height: 32px;
     border: none;
     border-radius: 50%;
     background-color: #4299e1;
     color: white;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
@@ -98,12 +79,12 @@ body {
 }
 
 .fullscreen-btn {
-    padding: 1rem 2rem;
+    padding: 0.5rem 1rem;
     border: none;
     border-radius: 8px;
     background-color: rgba(45, 55, 72, 0.9);
     color: white;
-    font-size: 1.15rem;
+    font-size: 0.85rem;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
@@ -152,6 +133,25 @@ body {
     max-width: 700px;
     width: 90%;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-top: 2.5rem; /* Make room for the buttons above */
+}
+
+.card-actions {
+    position: absolute;
+    bottom: 100%; /* Places the container right at the top edge of the card */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem; /* Small gap between buttons and the card */
+    z-index: 1600; /* Ensure it stays clickable above the table overlay */
+}
+
+.card-actions .help-btn {
+    margin-right: auto; /* Pushes the other buttons to the right */
 }
 
 .info-form {
