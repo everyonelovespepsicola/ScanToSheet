@@ -49,6 +49,7 @@ body {
     color: white;
     font-size: 0.85rem;
     font-weight: bold;
+    white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
 }
@@ -146,8 +147,20 @@ body {
     justify-content: flex-end;
     align-items: flex-end;
     gap: 0.5rem;
+    flex-wrap: nowrap; /* Ensures buttons never wrap to a second line */
     padding-bottom: 0.5rem; /* Small gap between buttons and the card */
     z-index: 1600; /* Ensure it stays clickable above the table overlay */
+}
+
+/* Guarantee the single-line layout fits on extremely narrow mobile screens */
+@media screen and (max-width: 400px) {
+    .card-actions {
+        gap: 0.25rem;
+    }
+    .view-toggle-btn, .fullscreen-btn {
+        padding: 0.4rem 0.5rem;
+        font-size: 0.75rem;
+    }
 }
 
 .card-actions .help-btn {
