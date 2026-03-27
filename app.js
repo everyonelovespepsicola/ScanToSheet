@@ -12,6 +12,7 @@ let exportBtn;
 let clearBtn;
 // let debugBtn;
 let toggleViewBtn;
+let fullscreenBtn;
 let formLayer;
 let tableLayer;
 
@@ -225,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // debugBtn = document.getElementById('debug-btn');
     clearBtn = document.getElementById('clear-btn');
     toggleViewBtn = document.getElementById('toggle-view-btn');
+    fullscreenBtn = document.getElementById('fullscreen-btn');
     formLayer = document.getElementById('form-layer');
     tableLayer = document.getElementById('table-layer');
     
@@ -454,6 +456,43 @@ document.addEventListener('DOMContentLoaded', () => {
             tableLayer.classList.remove('active');
             toggleViewBtn.textContent = 'View Entries';
             toggleViewBtn.classList.remove('close-mode');
+        }
+    });
+
+    // Listener for the fullscreen toggle button
+    fullscreenBtn.addEventListener('click', () => {
+        const isFullscreen = !!document.fullscreenElement;
+        const title = isFullscreen ? "Enter PIN to exit fullscreen:" : "Enter PIN to enter fullscreen:";
+        
+        openPasswordModal(title, (password) => {
+            if (password === 'unlock') {
+                closePasswordModal();
+                if (!isFullscreen) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        alert(`Error attempting to enable full-screen mode: ${err.message}`);
+                    });
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            } else {
+                passwordError.textContent = "Incorrect password.";
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+    });
+
+    // Keeps button text synchronized even if the user exits fullscreen by hitting the "ESC" key
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            fullscreenBtn.textContent = 'Exit Fullscreen';
+            fullscreenBtn.classList.add('close-mode');
+        } else {
+            fullscreenBtn.textContent = 'Fullscreen';
+            fullscreenBtn.classList.remove('close-mode');
         }
     });
 
